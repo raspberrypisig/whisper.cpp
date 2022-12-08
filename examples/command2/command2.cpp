@@ -7,18 +7,8 @@
 //
 
 #include "whisper.h"
+#include "rhasspy.h"
 
-#include <SDL.h>
-#include <SDL_audio.h>
-
-#include <cassert>
-#include <cstdio>
-#include <fstream>
-#include <mutex>
-#include <regex>
-#include <string>
-#include <thread>
-#include <vector>
 
 // command-line parameters
 struct whisper_params {
@@ -543,7 +533,8 @@ int main(int argc, char ** argv) {
     std::vector<float> pcmf32_cur;
     std::vector<float> pcmf32_prompt;
 
-    const std::string k_prompt = "Ok Whisper, start listening for commands.";
+    //const std::string k_prompt = "Ok Whisper, start listening for commands.";
+    const std::string k_prompt = "Okay,";
 
     // main loop
     while (is_running) {
@@ -578,6 +569,9 @@ int main(int argc, char ** argv) {
         }
 
         int64_t t_ms = 0;
+      
+
+        
 
         {
             audio.get(2000, pcmf32_cur);
@@ -591,7 +585,9 @@ int main(int argc, char ** argv) {
                     const auto txt = ::trim(::transcribe(ctx, params, pcmf32_cur, prob0, t_ms));
 
                     fprintf(stdout, "%s: Heard '%s%s%s', (t = %d ms)\n", __func__, "\033[1m", txt.c_str(), "\033[0m", (int) t_ms);
+                    rhasspy("http://192.168.20.98:12101/api/text-to-intent", txt);
 
+                    /*
                     const float sim = similarity(txt, k_prompt);
 
                     if (txt.length() < 0.8*k_prompt.length() || txt.length() > 1.2*k_prompt.length() || sim < 0.8f) {
@@ -607,7 +603,10 @@ int main(int argc, char ** argv) {
                         pcmf32_prompt = pcmf32_cur;
                         have_prompt = true;
                     }
-                } else {
+                    */
+                } 
+                /*
+                else {
                     audio.get(params.command_ms, pcmf32_cur);
 
                     // prepend the prompt audio
@@ -640,10 +639,13 @@ int main(int argc, char ** argv) {
                     fprintf(stdout, "%s: Command '%s%s%s', (t = %d ms)\n", __func__, "\033[1m", command.c_str(), "\033[0m", (int) t_ms);
                     fprintf(stdout, "\n");
                 }
-
+                */
                 audio.clear();
             }
         }
+      
+    
+    
     }
 
     audio.pause();
