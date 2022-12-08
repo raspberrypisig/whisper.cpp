@@ -1,5 +1,12 @@
 # whisper.cpp
 
+# Modification
+ Install script: 
+ 
+ ```
+ curl -L https://github.com/raspberrypisig/whisper.cpp/raw/master/install-whispercpp.sh|bash
+ ```
+
 [![Actions Status](https://github.com/ggerganov/whisper.cpp/workflows/CI/badge.svg)](https://github.com/ggerganov/whisper.cpp/actions)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
