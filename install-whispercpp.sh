@@ -10,7 +10,7 @@ make command
 mkdir examples/command2
 wget -O examples/command2/command2.cpp https://github.com/raspberrypisig/whisper.cpp/raw/master/examples/command2/command2.cpp
 cp Makefile Makefile.orig
-sed -ri '/command\:/!{p;d;};n;n;a command2: examples/command2/command2.cpp ggml.o whisper.o\n\t$(CXX) $(CXXFLAGS) examples/command2/command2.cpp ggml.o whisper.o -o command2 $(CC_SDL) $(LDFLAGS)\n' Makefile
+sed -ri '/command\:/!{p;d;};n;n;a command2: examples/command2/command2.cpp examples/command2/rhasspy.cpp ggml.o whisper.o\n\t$(CXX) $(CXXFLAGS) -I./examples/command2 examples/command2/command2.cpp examples/command2/rhasspy.cpp ggml.o whisper.o -o command2 $(CC_SDL) $(LDFLAGS)\n' Makefile
 make command2
 
 cat<<EOF > whisper
