@@ -32,6 +32,8 @@ struct whisper_params {
     std::string language  = "en";
     std::string model     = "models/ggml-base.en.bin";
     std::string fname_out = "";
+    
+    std::string rhasspy = "192.168.1.2";
 };
 
 void whisper_print_usage(int argc, char ** argv, const whisper_params & params);
@@ -59,6 +61,7 @@ bool whisper_params_parse(int argc, char ** argv, whisper_params & params) {
         else if (arg == "-l"   || arg == "--language")      { params.language      = argv[++i]; }
         else if (arg == "-m"   || arg == "--model")         { params.model         = argv[++i]; }
         else if (arg == "-f"   || arg == "--file")          { params.fname_out     = argv[++i]; }
+        else if (arg == "-r"   || arg == "--rhasspy")       { params.rhasspy       = argv[++i]; }
         else {
             fprintf(stderr, "error: unknown argument: %s\n", arg.c_str());
             whisper_print_usage(argc, argv, params);
@@ -90,6 +93,7 @@ void whisper_print_usage(int argc, char ** argv, const whisper_params & params) 
     fprintf(stderr, "  -l LANG,  --language LANG [%-7s] spoken language\n",                             params.language.c_str());
     fprintf(stderr, "  -m FNAME, --model FNAME   [%-7s] model path\n",                                  params.model.c_str());
     fprintf(stderr, "  -f FNAME, --file FNAME    [%-7s] text output file name\n",                       params.fname_out.c_str());
+    fprintf(stderr, "  -r,       --rhasspy       [%-7s] rhasspy IP address\n",                          params.rhasspy.c_str());
     fprintf(stderr, "\n");
 }
 
@@ -535,7 +539,9 @@ int main(int argc, char ** argv) {
 
     //const std::string k_prompt = "Ok Whisper, start listening for commands.";
     const std::string k_prompt = "Okay,";
-
+    
+    const std::string rhasspy_url = std::string("http://") + params.rhasspy + std::string(":12101/api/text-to-intent");
+     fprintf(stdout, "rhasspy_url:%s'\n",rhasspy_url.c_str());
     // main loop
     while (is_running) {
         // handle Ctrl + C
@@ -585,7 +591,8 @@ int main(int argc, char ** argv) {
                     const auto txt = ::trim(::transcribe(ctx, params, pcmf32_cur, prob0, t_ms));
 
                     fprintf(stdout, "%s: Heard '%s%s%s', (t = %d ms)\n", __func__, "\033[1m", txt.c_str(), "\033[0m", (int) t_ms);
-                    rhasspy("http://192.168.20.98:12101/api/text-to-intent", txt);
+                    //rhasspy("http://192.168.20.98:12101/api/text-to-intent", txt);
+                    rhasspy(rhasspy_url, txt);
 
                     /*
                     const float sim = similarity(txt, k_prompt);

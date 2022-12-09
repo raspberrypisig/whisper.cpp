@@ -8,7 +8,7 @@
 #include <curlpp/Options.hpp>
 #include <curlpp/Exception.hpp>
 
-void rhasspy(const char* url, const std::string payload) {
+void rhasspy(const std::string url, const std::string payload) {
   try {
     curlpp::Cleanup cleaner;
     curlpp::Easy request;

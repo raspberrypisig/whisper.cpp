@@ -23,7 +23,7 @@ chmod +x whisper
 
 cat<<EOF > whisper2
 #!/usr/bin/env bash
-./command2 -m ./models/ggml-tiny.en.bin -ac 768 -t 4 -c 0
+./command2 -m ./models/ggml-tiny.en.bin -ac 768 -t 4 -c 0 --rhasspy 192.168.20.98
 EOF
 chmod +x whisper2
 

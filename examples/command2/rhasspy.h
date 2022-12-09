@@ -10,4 +10,4 @@
 #include <thread>
 #include <vector>
 
-void rhasspy(const char* url, const std::string payload);
+void rhasspy(const std::string url, const std::string payload);
