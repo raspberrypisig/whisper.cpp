@@ -27,8 +27,12 @@ endif
 # Compile flags
 #
 
-CFLAGS   = -I.              -O3 -std=c11  
-CXXFLAGS = -I. -I./examples -O3 -std=c++11
+CFLAGS   = -I.              -g -std=c11  
+CXXFLAGS = -I. -I./examples -g -std=c++11
+
+#CFLAGS   = -I.              -O3 -std=c11  
+
+#CXXFLAGS = -I. -I./examples -O3 -std=c++11
 LDFLAGS  =
 
 # OS specific
@@ -171,6 +175,9 @@ stream: examples/stream/stream.cpp ggml.o whisper.o
 
 command: examples/command/command.cpp ggml.o whisper.o
 	$(CXX) $(CXXFLAGS) examples/command/command.cpp ggml.o whisper.o -o command $(CC_SDL) $(LDFLAGS)
+
+command2: examples/command2/command2.cpp examples/command2/rhasspy.cpp ggml.o whisper.o
+	$(CXX) $(CXXFLAGS) examples/command2/command2.cpp examples/command2/rhasspy.cpp ggml.o whisper.o -o command2 $(CC_SDL) $(LDFLAGS) -lcurl -lcurlpp
 
 bench: examples/bench/bench.cpp ggml.o whisper.o
 	$(CXX) $(CXXFLAGS) examples/bench/bench.cpp ggml.o whisper.o -o bench $(LDFLAGS)
